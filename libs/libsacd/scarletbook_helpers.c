@@ -96,7 +96,7 @@ char *get_album_dir(scarletbook_handle_t *handle)
     return albumdir;
 }
 
-char *get_music_filename(scarletbook_handle_t *handle, int area, int track, const char *override_title)
+char *get_music_filename(scarletbook_handle_t *handle, int area, int track, const char *override_title, int simple_track_names)
 {
     char *c;
     char track_artist[MAX_TRACK_ARTIST_LEN + 1];
@@ -104,7 +104,10 @@ char *get_music_filename(scarletbook_handle_t *handle, int area, int track, cons
     char disc_album_title[MAX_ALBUM_TITLE_LEN + 1];
     char disc_album_year[5];
     master_text_t *master_text = &handle->master_text;
-    char *album_title = 0; 
+    char *album_title = 0;
+
+    if (simple_track_names)
+        return parse_format("Track%N", track + 1, NULL, NULL, NULL, NULL);
     
     if (master_text->album_title)
         album_title = master_text->album_title; 

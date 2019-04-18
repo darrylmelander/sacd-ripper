@@ -69,6 +69,7 @@ static struct opts_s
 {
     int            two_channel;
     int            multi_channel;
+    int            simple_track_names;
     int            output_dsf;
     int            output_dsdiff_em;
     int            output_dsdiff;
@@ -111,6 +112,7 @@ static int parse_options(int argc, char *argv[])
         "Usage: %s [options] [outfile]\n"
         "  -2, --2ch-tracks                : Export two channel tracks (default)\n"
         "  -m, --mch-tracks                : Export multi-channel tracks\n"
+	"  -n, --simple-track-names        : Use simple track names\n"
         "  -e, --output-dsdiff-em          : output as Philips DSDIFF (Edit Master) file\n"
         "  -p, --output-dsdiff             : output as Philips DSDIFF file\n"
         "  -s, --output-dsf                : output as Sony DSF file\n"
@@ -134,7 +136,7 @@ static int parse_options(int argc, char *argv[])
         "  --usage                         : Display brief usage message\n";
 
     static const char usage_text[] = 
-        "Usage: %s [-2|--2ch-tracks] [-m|--mch-tracks] [-p|--output-dsdiff]\n"
+        "Usage: %s [-2|--2ch-tracks] [-m|--mch-tracks] [-n|--simple-track-names] [-p|--output-dsdiff]\n"
 #ifdef SECTOR_LIMIT
         "        [-e|--output-dsdiff-em] [-s|--output-dsf] [-z|--dsf-nopad] [-I|--output-iso]\n"
 #else
@@ -143,13 +145,14 @@ static int parse_options(int argc, char *argv[])
         "        [-c|--convert-dst] [-C|--export-cue] [-i|--input FILE] [-o|--output-dir DIR] [-y|--output-dir-conc DIR] [-P|--print]\n"
         "        [-?|--help] [--usage]\n";
 #ifdef SECTOR_LIMIT
-    static const char options_string[] = "2mepszIcCvi:o:y:t:P?";
+    static const char options_string[] = "2menpszIcCvi:o:y:t:P?";
 #else
-    static const char options_string[] = "2mepszIwcCvi:o:y:t:P?";
+    static const char options_string[] = "2menpszIwcCvi:o:y:t:P?";
 #endif
     static const struct option options_table[] = {
         {"2ch-tracks", no_argument, NULL, '2' },
         {"mch-tracks", no_argument, NULL, 'm' },
+	{"simple-track-names", no_argument, NULL, 'n' },
         {"output-dsdiff-em", no_argument, NULL, 'e'}, 
         {"output-dsdiff", no_argument, NULL, 'p'}, 
         {"output-dsf", no_argument, NULL, 's'}, 
@@ -182,6 +185,9 @@ static int parse_options(int argc, char *argv[])
         case 'm': 
             opts.multi_channel = 1; 
             break;
+	case 'n':
+	    opts.simple_track_names = 1;
+	    break;
         case 'e': 
             opts.output_dsdiff_em = 1;
             opts.output_dsdiff = 0;
@@ -315,6 +321,7 @@ static void init(void)
     /* Default option values. */
     opts.two_channel        = 0;
     opts.multi_channel      = 0;
+    opts.simple_track_names = 0;
     opts.output_dsf         = 0;
     opts.output_iso         = 0;
     opts.output_dir         = 0;
@@ -508,7 +515,7 @@ int main(int argc, char* argv[])
                                         if (opts.select_tracks && opts.selected_tracks[i] == 0)
                                             continue;
 
-                                        musicfilename = get_music_filename(handle, area_idx[j], i, opts.output_file);
+                                        musicfilename = get_music_filename(handle, area_idx[j], i, opts.output_file, opts.simple_track_names);
 
                                         if (opts.output_dsf)
                                         {
@@ -586,7 +593,7 @@ int main(int argc, char* argv[])
                                 if (opts.select_tracks && opts.selected_tracks[i] == 0)
                                     continue;
 
-                                musicfilename = get_music_filename(handle, area_idx[j], i, opts.output_file);
+                                musicfilename = get_music_filename(handle, area_idx[j], i, opts.output_file, opts.simple_track_names);
 
                                 if (opts.output_dsf)
                                 {

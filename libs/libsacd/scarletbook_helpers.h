@@ -62,7 +62,7 @@ char *get_frame_format_string(area_toc_t *);
 
 char *get_album_dir(scarletbook_handle_t *);
 
-char *get_music_filename(scarletbook_handle_t *, int, int, const char *);
+char *get_music_filename(scarletbook_handle_t *, int, int, const char *, int);
 
 int utf8cpy(char *, char *, int);
 

@@ -45,6 +45,7 @@ The following options are available for the sacd_extract commandline tool: ::
 
   -2, --2ch-tracks                : Export two channel tracks (default)
   -m, --mch-tracks                : Export multi-channel tracks
+  -n, --simple-track-names        : Track filenames are Track01.dsf, Track02.dsf, etc
   -e, --output-dsdiff-em          : output as Philips DSDIFF (Edit Master) file
   -p, --output-dsdiff             : output as Philips DSDIFF file
   -s, --output-dsf                : output as Sony DSF file
@@ -84,6 +85,9 @@ Concurrently extract an ISO file to /home/user/blah/<album_name>.iso and all ste
 
     $ sacd_extract -I -s -w -z -2 -m -i192.168.1.10:2002 -o /home/user/blah -y /tmp/blah
 
+Extract tracks in DSF using simple names like Track01.dsf, Track02.dsf, etc.  Useful when filenames are otherwise too long.::
+
+    $ sacd_extract -s -n -2 -m -i192.168.1.10:2002 -o /home/user/blah
 
 Compilation
 ===========
